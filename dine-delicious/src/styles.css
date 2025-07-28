@@ -1,0 +1,104 @@
+/* Common Styles */
+.management-container, .dashboard-container, .menu-management, 
+.order-management, .table-management, .auth-form-container {
+  padding: 20px;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Card styles */
+.card, .stat-card, .order-card, .table-card {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Status badges */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.status-badge.available {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status-badge.occupied {
+  background-color: #f44336;
+  color: white;
+}
+
+.status-badge.pending {
+  background-color: #FFC107;
+  color: black;
+}
+
+.status-badge.completed {
+  background-color: #2196F3;
+  color: white;
+}
+
+/* Buttons */
+button, .btn {
+  padding: 8px 16px;
+  margin-right: 8px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.edit-btn {
+  background-color: #FFC107;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.submit-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  width: 100%;
+}
+
+/* Forms */
+form {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}

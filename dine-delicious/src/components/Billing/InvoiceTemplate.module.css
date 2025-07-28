@@ -1,0 +1,183 @@
+.invoiceContainer {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: white;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+.invoiceHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.logo h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.invoiceInfo {
+  text-align: right;
+}
+
+.invoiceInfo h3 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
+
+.customerInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.itemsTable {
+  width: 100%;
+  margin: 25px 0;
+}
+
+.tableHeader {
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 2px solid #333;
+  font-weight: bold;
+}
+
+.tableRow {
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.colDescription {
+  width: 60%;
+  padding-right: 10px;
+}
+
+.colQty {
+  width: 10%;
+  text-align: center;
+}
+
+.colPrice {
+  width: 15%;
+  text-align: right;
+}
+
+.colTotal {
+  width: 15%;
+  text-align: right;
+}
+
+.totals {
+  margin-top: 30px;
+  text-align: right;
+}
+
+.totalRow {
+  display: inline-block;
+  min-width: 200px;
+  margin-bottom: 8px;
+}
+
+.totalRow span {
+  display: inline-block;
+  width: 120px;
+}
+
+.grandTotal {
+  display: inline-block;
+  min-width: 200px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid #333;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.statusBadge {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  padding: 5px 15px;
+  background-color: #333;
+  color: white;
+  font-weight: bold;
+  transform: rotate(15deg);
+}
+
+/* Print-specific styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .invoiceContainer, .invoiceContainer * {
+    visibility: visible;
+  }
+  .invoiceContainer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+.printContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.printButton {
+  padding: 10px 25px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  align-self: flex-end;
+}
+
+.printButton:hover {
+  background-color: #0b7dda;
+}
+
+/* Hide the template from normal view */
+.invoiceContainer {
+  display: none;
+}
+
+@media print {
+  .printContainer {
+    display: none;
+  }
+  
+  .invoiceContainer {
+    display: block;
+  }
+}
