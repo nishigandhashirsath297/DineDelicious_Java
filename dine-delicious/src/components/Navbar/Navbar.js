@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import styles from './Navbar.module.css';
 
-const Navbar = () => {
+const Navbar = ({ logo }) => { 
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -15,7 +15,7 @@ const Navbar = () => {
         {/* Logo/Brand */}
         <Link to="/" className={styles.navBrand}>
           <img 
-            src="/logo.svg" 
+            src={logo}
             alt="Dine Delicious Logo" 
             className={styles.logo}
           />

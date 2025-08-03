@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// Change App.js import to:
 import Navbar from './components/Navbar/Navbar';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -11,11 +10,12 @@ import OrderManagement from './pages/OrderManagement';
 import BillList from './components/Billing/BillList';
 import CustomerManagement from './pages/CustomerManagement';
 import './styles.css';
+import logo from './Assets/logo.png'; 
 
 function App() {
   return (
     <Router>
-      <Navbar />
+      <Navbar logo={logo} /> {/* Pass the logo as a prop to Navbar */}
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

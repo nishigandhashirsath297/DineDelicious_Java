@@ -12,7 +12,7 @@ const PaymentModal = ({ bill, onClose, onPaymentComplete }) => {
     setProcessing(true);
     
     try {
-      // Simulate API call
+      
       await new Promise(resolve => setTimeout(resolve, 1500));
       onPaymentComplete({
         billId: bill.id,
