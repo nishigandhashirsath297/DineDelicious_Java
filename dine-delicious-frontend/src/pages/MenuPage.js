@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Modal, Button, ButtonGroup } from 'react-bootstrap';
+import { motion } from 'framer-motion';
+import { GiMeat, GiBroccoli } from 'react-icons/gi';
+import './MenuPage.css'; // Assume you created this custom CSS file
 
 const MenuPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -70,7 +73,7 @@ const MenuPage = () => {
 
   return (
     <Container className="my-5">
-      <h2 className="text-center mb-4">Our Menu</h2>
+      <h2 className="text-center mb-4 fancy-heading">Our Menu</h2>
 
       <div className="mb-4 text-center">
         <select
@@ -96,13 +99,13 @@ const MenuPage = () => {
             variant={selectedType === 'veg' ? 'success' : 'outline-success'}
             onClick={() => setSelectedType('veg')}
           >
-            Veg
+            <GiBroccoli className="me-1" /> Veg
           </Button>
           <Button
             variant={selectedType === 'non-veg' ? 'danger' : 'outline-danger'}
             onClick={() => setSelectedType('non-veg')}
           >
-            Non-Veg
+            <GiMeat className="me-1" /> Non-Veg
           </Button>
         </ButtonGroup>
       </div>
@@ -110,29 +113,35 @@ const MenuPage = () => {
       <Row>
         {filteredItems.map((item, index) => (
           <Col key={index} md={6} lg={4} className="mb-4">
-            <Card className="h-100 shadow-sm">
-              <Card.Img
-                variant="top"
-                src={item.image}
-                alt={item.name}
-                style={{ height: '200px', objectFit: 'cover' }}
-              />
-              <Card.Body className="d-flex flex-column justify-content-between">
-                <div>
-                  <Card.Title>{item.name}</Card.Title>
-                  <Card.Text>{item.description}</Card.Text>
-                  <h6 className="text-muted">{item.category} | {item.type.toUpperCase()}</h6>
-                  <h5>{item.price}</h5>
-                </div>
-                <Button
-                  variant="success"
-                  className="mt-3"
-                  onClick={() => handleOrderClick(item)}
-                >
-                  Order Now
-                </Button>
-              </Card.Body>
-            </Card>
+            <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
+              <Card className="h-100 menu-card">
+                <Card.Img
+                  variant="top"
+                  src={item.image}
+                  alt={item.name}
+                  style={{ height: '200px', objectFit: 'cover' }}
+                />
+                <Card.Body className="d-flex flex-column justify-content-between">
+                  <div>
+                    <Card.Title className="fw-bold">{item.name}</Card.Title>
+                    <Card.Text>{item.description}</Card.Text>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span className="text-muted">
+                        {item.category} | {item.type === 'veg' ? <GiBroccoli className="text-success" /> : <GiMeat className="text-danger" />}
+                      </span>
+                      <h5 className="text-dark fw-bold">{item.price}</h5>
+                    </div>
+                  </div>
+                  <Button
+                    variant="success"
+                    className="mt-3 order-btn"
+                    onClick={() => handleOrderClick(item)}
+                  >
+                    Order Now
+                  </Button>
+                </Card.Body>
+              </Card>
+            </motion.div>
           </Col>
         ))}
       </Row>

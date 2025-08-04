@@ -1,0 +1,54 @@
+/* src/pages/HomePage.css */
+.hero-content {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2.5rem 3.5rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  color: #fff;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+}
+
+.hero-content p {
+  font-size: 1.5rem;
+  color: #f8f9fa;
+  margin-top: 1rem;
+  font-weight: 300;
+}
+
+.contact-section {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 2rem 3rem;
+  margin-top: 4rem;
+  border-radius: 1rem;
+  color: white;
+  text-align: center;
+  width: 100%;
+  max-width: 700px;
+}
+
+.contact-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #f4c10f;
+  font-weight: 600;
+}
+
+.contact-section p {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+.homepage-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
