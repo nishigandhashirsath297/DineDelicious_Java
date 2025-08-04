@@ -10,9 +10,12 @@ import OrderManagement from './pages/OrderManagement';
 import BillList from './components/Billing/BillList';
 import CustomerManagement from './pages/CustomerManagement';
 import './styles.css';
-import logo from './Assets/logo.png'; 
+import logo from './Assets/logo.png';
 
-function App() {
+// Ensure all page components are imported 
+// and any necessary stylesheets are linked as done above
+
+const App = () => {
   return (
     <Router>
       <Navbar logo={logo} /> {/* Pass the logo as a prop to Navbar */}
