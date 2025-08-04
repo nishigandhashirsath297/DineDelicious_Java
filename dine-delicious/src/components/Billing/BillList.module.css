@@ -1,0 +1,44 @@
+.billListContainer {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  padding: 20px;
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.filters select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.filters input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  max-width: 300px;
+}
+
+.listHeader {
+  display: grid;
+  grid-template-columns: 80px 1fr 100px 100px 120px;
+  font-weight: 500;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 8px;
+}
+
+.noResults {
+  text-align: center;
+  padding: 40px 0;
+  color: #757575;
+  font-size: 16px;
+}

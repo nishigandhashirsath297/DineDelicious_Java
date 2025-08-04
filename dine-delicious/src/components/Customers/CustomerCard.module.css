@@ -1,0 +1,60 @@
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status.active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status.inactive {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.body p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.editButton {
+  padding: 0.5rem 1rem;
+  background-color: #2196F3;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.editButton:hover {
+  background-color: #0b7dda;
+}
