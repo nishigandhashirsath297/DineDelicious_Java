@@ -1,0 +1,12 @@
+.menu-img {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.menu-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
