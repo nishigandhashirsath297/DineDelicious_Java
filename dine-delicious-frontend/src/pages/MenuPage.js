@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Card, Modal, Button, ButtonGroup } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import { GiMeat, GiBroccoli } from 'react-icons/gi';
-import './MenuPage.css'; // Assume you created this custom CSS file
+import { useCart } from '../context/CartContext'; 
+import './MenuPage.css';
+import { useNavigate } from 'react-router-dom';
 
 const MenuPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -10,46 +12,54 @@ const MenuPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
+  const { addToCart } = useCart(); 
+  const navigate = useNavigate(); 
+
   const menuItems = [
     {
+      id: 1,
       name: 'Choco Lava Cake',
       category: 'Desserts',
       type: 'veg',
       description: 'Warm chocolate cake with molten center.',
       image: '/images/ChocoLavaCake.jpg',
-      price: '₹149',
+      price: 149,
     },
     {
+      id: 2,
       name: 'Pasta Alfredo',
       category: 'Main Course',
       type: 'veg',
       description: 'Creamy Alfredo pasta with herbs and cheese.',
       image: '/images/PastaAlfredo.jpg',
-      price: '₹229',
+      price: 229,
     },
     {
+      id: 3,
       name: 'Pizza Margherita',
       category: 'Main Course',
       type: 'veg',
       description: 'Classic pizza with cheese, tomato, and basil.',
       image: '/images/PizzaMargherita.jpg',
-      price: '₹199',
+      price: 199,
     },
     {
+      id: 4,
       name: 'Veggie Burger',
       category: 'Snacks',
       type: 'veg',
       description: 'Juicy vegetarian patty with fresh toppings.',
       image: '/images/VeggieBurger.jpg',
-      price: '₹179',
+      price: 179,
     },
     {
+      id: 5,
       name: 'Chicken Tikka',
       category: 'Main Course',
       type: 'non-veg',
       description: 'Spicy grilled chicken chunks with herbs.',
       image: '/images/ChickenTikka.jpg',
-      price: '₹249',
+      price: 249,
     },
   ];
 
@@ -69,6 +79,14 @@ const MenuPage = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedItem(null);
+  };
+
+  const handleConfirmOrder = () => {
+    if (selectedItem) {
+      addToCart(selectedItem); 
+      handleCloseModal();
+      navigate('/cart'); 
+    }
   };
 
   return (
@@ -129,7 +147,7 @@ const MenuPage = () => {
                       <span className="text-muted">
                         {item.category} | {item.type === 'veg' ? <GiBroccoli className="text-success" /> : <GiMeat className="text-danger" />}
                       </span>
-                      <h5 className="text-dark fw-bold">{item.price}</h5>
+                      <h5 className="text-dark fw-bold">₹{item.price}</h5>
                     </div>
                   </div>
                   <Button
@@ -160,20 +178,14 @@ const MenuPage = () => {
                 style={{ maxHeight: '200px', objectFit: 'cover' }}
               />
               <p>{selectedItem.description}</p>
-              <h5>{selectedItem.price}</h5>
+              <h5>₹{selectedItem.price}</h5>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleCloseModal}>
                 Cancel
               </Button>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  alert(`Order confirmed for ${selectedItem.name}`);
-                  handleCloseModal();
-                }}
-              >
-                Confirm Order
+              <Button variant="primary" onClick={handleConfirmOrder}>
+                Add to Cart
               </Button>
             </Modal.Footer>
           </>

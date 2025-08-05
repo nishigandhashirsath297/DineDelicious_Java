@@ -1,7 +1,6 @@
-// src/pages/BillingPage.js
-
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const dummyBills = [
   {
@@ -9,6 +8,7 @@ const dummyBills = [
     tableNumber: 'T101',
     date: '2025-08-04',
     totalAmount: 1345,
+    isPaid: false,
     items: [
       { name: 'Pizza Margherita', quantity: 2, price: 250 },
       { name: 'Pasta Alfredo', quantity: 1, price: 300 },
@@ -19,6 +19,7 @@ const dummyBills = [
     tableNumber: 'T102',
     date: '2025-08-03',
     totalAmount: 780,
+    isPaid: true,
     items: [
       { name: 'Veggie Burger', quantity: 2, price: 180 },
       { name: 'Choco Lava Cake', quantity: 1, price: 200 },
@@ -30,10 +31,10 @@ const BillingPage = () => {
   const [bills, setBills] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBill, setSelectedBill] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // replace this with API call later
-    setBills(dummyBills);
+    setBills(dummyBills); // replace with API later
   }, []);
 
   const handleView = (bill) => {
@@ -46,6 +47,10 @@ const BillingPage = () => {
     setSelectedBill(null);
   };
 
+  const handlePay = (bill) => {
+    navigate('/payment', { state: { bill } });
+  };
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Billing History</h2>
@@ -56,6 +61,7 @@ const BillingPage = () => {
             <th>Table</th>
             <th>Date</th>
             <th>Total (₹)</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -66,10 +72,25 @@ const BillingPage = () => {
               <td>{bill.tableNumber}</td>
               <td>{bill.date}</td>
               <td>{bill.totalAmount}</td>
+              <td>{bill.isPaid ? 'Paid' : 'Unpaid'}</td>
               <td>
-                <Button variant="info" size="sm" onClick={() => handleView(bill)}>
+                <Button
+                  variant="info"
+                  size="sm"
+                  className="me-2"
+                  onClick={() => handleView(bill)}
+                >
                   View Details
                 </Button>
+                {!bill.isPaid && (
+                  <Button
+                    variant="success"
+                    size="sm"
+                    onClick={() => handlePay(bill)}
+                  >
+                    Pay
+                  </Button>
+                )}
               </td>
             </tr>
           ))}
@@ -93,8 +114,14 @@ const BillingPage = () => {
             ))}
           </ul>
           <h5>Total: ₹{selectedBill?.totalAmount}</h5>
+          <p><strong>Status:</strong> {selectedBill?.isPaid ? 'Paid' : 'Unpaid'}</p>
         </Modal.Body>
         <Modal.Footer>
+          {!selectedBill?.isPaid && (
+            <Button variant="success" onClick={() => handlePay(selectedBill)}>
+              Proceed to Payment
+            </Button>
+          )}
           <Button variant="secondary" onClick={handleClose}>Close</Button>
           <Button variant="primary" onClick={() => window.print()}>Print</Button>
         </Modal.Footer>

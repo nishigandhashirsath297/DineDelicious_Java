@@ -39,6 +39,12 @@ function Header() {
             <LinkContainer to="/billing">
               <Nav.Link>Billing</Nav.Link>
             </LinkContainer>
+            <LinkContainer to="/payment">
+              <Nav.Link>Pay Now</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/my-payments">
+              <Nav.Link>My Payments</Nav.Link>
+            </LinkContainer>
             <LinkContainer to="/login">
               <Nav.Link>Login</Nav.Link>
             </LinkContainer>
