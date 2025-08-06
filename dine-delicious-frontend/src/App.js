@@ -41,6 +41,8 @@ function App() {
             <Route path="/my-payments" element={<MyPayments />} />
             <Route path="/admin/payments" element={<AllPaymentsAdmin />} />
             <Route path="*" element={<NotFoundPage />} />
+            <Route path="/my-orders" element={<MyOrdersPage />} />
+
           </Routes>
         </main>
       </Router>

@@ -1,67 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Modal, Button, ButtonGroup } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import { GiMeat, GiBroccoli } from 'react-icons/gi';
-import { useCart } from '../context/CartContext'; 
-import './MenuPage.css';
+import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../api/axiosInstance';
+import './MenuPage.css';
 
 const MenuPage = () => {
+  const [menuItems, setMenuItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedType, setSelectedType] = useState('All');
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const { addToCart } = useCart(); 
-  const navigate = useNavigate(); 
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
 
-  const menuItems = [
-    {
-      id: 1,
-      name: 'Choco Lava Cake',
-      category: 'Desserts',
-      type: 'veg',
-      description: 'Warm chocolate cake with molten center.',
-      image: '/images/ChocoLavaCake.jpg',
-      price: 149,
-    },
-    {
-      id: 2,
-      name: 'Pasta Alfredo',
-      category: 'Main Course',
-      type: 'veg',
-      description: 'Creamy Alfredo pasta with herbs and cheese.',
-      image: '/images/PastaAlfredo.jpg',
-      price: 229,
-    },
-    {
-      id: 3,
-      name: 'Pizza Margherita',
-      category: 'Main Course',
-      type: 'veg',
-      description: 'Classic pizza with cheese, tomato, and basil.',
-      image: '/images/PizzaMargherita.jpg',
-      price: 199,
-    },
-    {
-      id: 4,
-      name: 'Veggie Burger',
-      category: 'Snacks',
-      type: 'veg',
-      description: 'Juicy vegetarian patty with fresh toppings.',
-      image: '/images/VeggieBurger.jpg',
-      price: 179,
-    },
-    {
-      id: 5,
-      name: 'Chicken Tikka',
-      category: 'Main Course',
-      type: 'non-veg',
-      description: 'Spicy grilled chicken chunks with herbs.',
-      image: '/images/ChickenTikka.jpg',
-      price: 249,
-    },
-  ];
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        const response = await axiosInstance.get('/menu-items');
+        setMenuItems(response.data);
+      } catch (err) {
+        setError('Failed to load menu items. Please try again later.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenuItems();
+  }, []);
 
   const categories = ['All', ...new Set(menuItems.map(item => item.category))];
 
@@ -83,11 +55,14 @@ const MenuPage = () => {
 
   const handleConfirmOrder = () => {
     if (selectedItem) {
-      addToCart(selectedItem); 
+      addToCart(selectedItem);
       handleCloseModal();
-      navigate('/cart'); 
+      navigate('/cart');
     }
   };
+
+  if (loading) return <div className="text-center my-5">Loading menu...</div>;
+  if (error) return <div className="text-center my-5 text-danger">{error}</div>;
 
   return (
     <Container className="my-5">
@@ -145,7 +120,12 @@ const MenuPage = () => {
                     <Card.Text>{item.description}</Card.Text>
                     <div className="d-flex justify-content-between align-items-center">
                       <span className="text-muted">
-                        {item.category} | {item.type === 'veg' ? <GiBroccoli className="text-success" /> : <GiMeat className="text-danger" />}
+                        {item.category} |{' '}
+                        {item.type === 'veg' ? (
+                          <GiBroccoli className="text-success" />
+                        ) : (
+                          <GiMeat className="text-danger" />
+                        )}
                       </span>
                       <h5 className="text-dark fw-bold">₹{item.price}</h5>
                     </div>

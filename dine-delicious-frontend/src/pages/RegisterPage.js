@@ -1,101 +1,111 @@
+// src/pages/RegisterPage.js
 import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Card, Alert } from 'react-bootstrap';
+import axios from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    fullName: '',
+    name: '',
     email: '',
     password: '',
-    confirmPassword: '',
+    role: 'USER'
   });
-  const [error, setError] = useState('');
+
+  const [registerStatus, setRegisterStatus] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-    setError('');
+    setFormData({ 
+      ...formData,
+      [e.target.name]: e.target.value 
+    });
   };
 
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    const { fullName, email, password, confirmPassword } = formData;
 
-    if (!fullName || !email || !password || !confirmPassword) {
-      setError('Please fill in all fields');
-      return;
+    try {
+      const response = await axios.post('/auth/register', formData);
+      console.log('Registration success:', response.data);
+      setRegisterStatus('success');
+      setErrorMessage('');
+
+      setTimeout(() => navigate('/login'), 1500);
+    } catch (error) {
+      console.error('Registration failed:', error);
+      setRegisterStatus('error');
+      setErrorMessage(error.response?.data?.message || 'Registration failed. Please try again.');
     }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    // For now, simulate successful registration
-    alert('Registered successfully!');
-    navigate('/login');
   };
 
   return (
     <Container className="py-5">
-      <Row className="justify-content-center">
+      <Row className="justify-content-md-center">
         <Col md={6}>
-          <h2 className="text-center mb-4">Register</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="fullName">
-              <Form.Label>Full Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="fullName"
-                placeholder="Enter your full name"
-                value={formData.fullName}
-                onChange={handleChange}
-              />
-            </Form.Group>
+          <Card className="shadow-sm">
+            <Card.Body>
+              <h3 className="text-center mb-4">Register</h3>
 
-            <Form.Group className="mb-3" controlId="email">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                placeholder="Enter email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </Form.Group>
+              {registerStatus === 'success' && (
+                <Alert variant="success">Registration successful! Redirecting to login...</Alert>
+              )}
+              {registerStatus === 'error' && (
+                <Alert variant="danger">{errorMessage}</Alert>
+              )}
 
-            <Form.Group className="mb-3" controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </Form.Group>
+              <Form onSubmit={handleRegister}>
+                <Form.Group controlId="formName" className="mb-3">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
 
-            <Form.Group className="mb-4" controlId="confirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-            </Form.Group>
+                <Form.Group controlId="formEmail" className="mb-3">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
 
-            <div className="d-grid">
-              <Button variant="primary" type="submit">
-                Register
-              </Button>
-            </div>
-          </Form>
+                <Form.Group controlId="formPassword" className="mb-3">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Control type="hidden" name="role" value={formData.role} />
+
+                <Button variant="primary" type="submit" className="w-100">
+                  Register
+                </Button>
+              </Form>
+
+              <div className="mt-3 text-center">
+                <small>
+                  Already have an account? <a href="/login">Login here</a>
+                </small>
+              </div>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>

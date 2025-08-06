@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+<Nav.Link as={Link} to="/my-orders">My Orders</Nav.Link>
 
 function Navbar() {
   return (

@@ -1,19 +1,36 @@
+// src/pages/LoginPage.js
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Card, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import axios from '../api/axiosInstance';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginStatus, setLoginStatus] = useState(null); // 'success' or 'error'
+  const [loginStatus, setLoginStatus] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Dummy login check — replace with real backend call later
-    if (email === 'admin@example.com' && password === 'admin') {
+    try {
+      const response = await axios.post('/auth/login', { email, password });
+
+      const { token, userId } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId); // ✅ Important for cart and order logic
       setLoginStatus('success');
-    } else {
+      setErrorMessage('');
+      navigate('/');
+    } catch (error) {
+      console.error('Login failed:', error);
       setLoginStatus('error');
+      if (error.response?.data?.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Invalid credentials or server error.');
+      }
     }
   };
 
@@ -29,7 +46,7 @@ const LoginPage = () => {
                 <Alert variant="success">Login successful!</Alert>
               )}
               {loginStatus === 'error' && (
-                <Alert variant="danger">Invalid email or password.</Alert>
+                <Alert variant="danger">{errorMessage}</Alert>
               )}
 
               <Form onSubmit={handleLogin}>
