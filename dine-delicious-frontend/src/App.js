@@ -17,12 +17,13 @@ import PaymentPage from './pages/PaymentPage';
 import OrderSummary from './pages/OrderSummary';
 import MyPayments from './pages/MyPayments';
 import AllPaymentsAdmin from './pages/AllPaymentsAdmin';
+import MyOrdersPage from './pages/MyOrdersPage'; // ✅ Added missing import
 import { CartProvider } from './context/CartContext'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <CartProvider> {}
+    <CartProvider>
       <Router>
         <Header />
         <main className="container mt-4">
@@ -40,9 +41,8 @@ function App() {
             <Route path="/order-summary" element={<OrderSummary />} />
             <Route path="/my-payments" element={<MyPayments />} />
             <Route path="/admin/payments" element={<AllPaymentsAdmin />} />
-            <Route path="*" element={<NotFoundPage />} />
             <Route path="/my-orders" element={<MyOrdersPage />} />
-
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
       </Router>

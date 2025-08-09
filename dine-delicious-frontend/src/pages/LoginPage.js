@@ -1,4 +1,3 @@
-// src/pages/LoginPage.js
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -19,18 +18,15 @@ const LoginPage = () => {
 
       const { token, userId } = response.data;
       localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId); // ✅ Important for cart and order logic
+      localStorage.setItem('userId', userId); 
+
       setLoginStatus('success');
       setErrorMessage('');
       navigate('/');
     } catch (error) {
       console.error('Login failed:', error);
       setLoginStatus('error');
-      if (error.response?.data?.message) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage('Invalid credentials or server error.');
-      }
+      setErrorMessage(error.response?.data?.message || 'Invalid credentials or server error.');
     }
   };
 

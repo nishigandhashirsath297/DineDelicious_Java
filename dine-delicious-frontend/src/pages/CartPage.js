@@ -12,9 +12,8 @@ const CartPage = () => {
 
   const handleCheckout = async () => {
     try {
-      const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
-      const tableId = localStorage.getItem('tableId') || 1; // default to table 1 if not set
+      const tableId = localStorage.getItem('tableId') || 1;
 
       if (!userId) {
         alert('User not logged in.');
@@ -32,12 +31,12 @@ const CartPage = () => {
         items: orderItems,
       });
 
-      console.log('Order placed successfully:', response.data);
+      console.log('✅ Order placed successfully:', response.data);
 
       clearCart();
       navigate('/order-summary', { state: { order: response.data } });
     } catch (error) {
-      console.error('Order placement failed:', error);
+      console.error('❌ Order placement failed:', error);
       alert('Failed to place order. Please try again.');
     }
   };
@@ -45,13 +44,17 @@ const CartPage = () => {
   return (
     <div className="container mt-4">
       <h2>My Cart</h2>
+
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <>
           <ul className="list-group mb-3">
             {cartItems.map(item => (
-              <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
+              <li
+                key={item.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
                 <div>
                   {item.name} - ₹{item.price}
                   <br />
@@ -59,7 +62,9 @@ const CartPage = () => {
                     type="number"
                     min="1"
                     value={item.quantity}
-                    onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateQuantity(item.id, Math.max(1, parseInt(e.target.value) || 1))
+                    }
                     className="form-control form-control-sm mt-1"
                     style={{ width: '60px' }}
                   />
@@ -73,6 +78,7 @@ const CartPage = () => {
               </li>
             ))}
           </ul>
+
           <h5>Total: ₹{total.toFixed(2)}</h5>
           <button className="btn btn-primary" onClick={handleCheckout}>
             Proceed to Billing

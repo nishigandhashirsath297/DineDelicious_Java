@@ -1,87 +1,104 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Row, Col, Alert } from 'react-bootstrap';
-
-const dummyTables = [
-  { id: 1, tableNumber: 'T01', capacity: 2, category: 'Regular', status: 'Available' },
-  { id: 2, tableNumber: 'T02', capacity: 4, category: 'Family', status: 'Available' },
-  { id: 3, tableNumber: 'T03', capacity: 6, category: 'VIP', status: 'Booked' },
-];
+import axios from '../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 const TableReservationPage = () => {
-  const [name, setName] = useState('');
-  const [selectedTableId, setSelectedTableId] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [guestCount, setGuestCount] = useState(1);
+  const [note, setNote] = useState('');
+  const navigate = useNavigate();
 
-  const handleReservation = (e) => {
+  const handleReservation = async (e) => {
     e.preventDefault();
-    const reservedTable = dummyTables.find((table) => table.id === parseInt(selectedTableId));
 
-    if (reservedTable && reservedTable.status === 'Available') {
-      setSuccessMessage(`Table ${reservedTable.tableNumber} reserved successfully for ${name}!`);
-      setName('');
-      setSelectedTableId('');
-    } else {
-      setSuccessMessage(`Sorry, selected table is not available.`);
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token'); // ⬅️ JWT Token
+
+    if (!userId || !token) {
+      alert('User not logged in!');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        '/api/bookings', // ✅ corrected URL
+        {
+          userId: parseInt(userId),
+          bookingTime: `${date}T${time}`,
+          status: 'PENDING',
+          numberOfGuests: guestCount,
+          requestedAmenities: note ? [note] : []
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ Add token in header
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      alert('✅ Reservation successful!');
+      navigate('/booking');
+
+    } catch (error) {
+      console.error('❌ Reservation failed:', error.response || error.message || error);
+      alert('Reservation failed. Please try again.');
     }
   };
 
   return (
-    <Container className="py-5">
-      <h2 className="mb-4 text-center">Reserve a Table</h2>
-
-      {successMessage && <Alert variant="info">{successMessage}</Alert>}
-
-      <Form onSubmit={handleReservation}>
-        <Form.Group controlId="reservationName" className="mb-3">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+    <div className="container mt-4">
+      <h2>Reserve a Table</h2>
+      <form onSubmit={handleReservation} className="mt-3">
+        <div className="mb-3">
+          <label>Date:</label>
+          <input
+            type="date"
+            className="form-control"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             required
           />
-        </Form.Group>
+        </div>
 
-        <Form.Group controlId="tableSelect" className="mb-3">
-          <Form.Label>Select Table</Form.Label>
-          <Form.Select
-            value={selectedTableId}
-            onChange={(e) => setSelectedTableId(e.target.value)}
+        <div className="mb-3">
+          <label>Time:</label>
+          <input
+            type="time"
+            className="form-control"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
             required
-          >
-            <option value="">-- Select Table --</option>
-            {dummyTables
-              .filter((table) => table.status === 'Available')
-              .map((table) => (
-                <option key={table.id} value={table.id}>
-                  {table.tableNumber} - {table.category} (Seats: {table.capacity})
-                </option>
-              ))}
-          </Form.Select>
-        </Form.Group>
+          />
+        </div>
 
-        <Button type="submit" variant="primary">
-          Reserve Table
-        </Button>
-      </Form>
+        <div className="mb-3">
+          <label>Number of Guests:</label>
+          <input
+            type="number"
+            className="form-control"
+            min="1"
+            value={guestCount}
+            onChange={(e) => setGuestCount(parseInt(e.target.value))}
+            required
+          />
+        </div>
 
-      <hr className="my-5" />
+        <div className="mb-3">
+          <label>Note / Special Requests (optional):</label>
+          <textarea
+            className="form-control"
+            rows="2"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+          ></textarea>
+        </div>
 
-      <h4 className="mb-3">All Tables</h4>
-      <Row>
-        {dummyTables.map((table) => (
-          <Col md={4} key={table.id} className="mb-3">
-            <div className={`p-3 border rounded ${table.status === 'Booked' ? 'bg-light text-muted' : ''}`}>
-              <h5>Table {table.tableNumber}</h5>
-              <p>Category: {table.category}</p>
-              <p>Capacity: {table.capacity}</p>
-              <p>Status: <strong>{table.status}</strong></p>
-            </div>
-          </Col>
-        ))}
-      </Row>
-    </Container>
+        <button type="submit" className="btn btn-primary">Reserve Table</button>
+      </form>
+    </div>
   );
 };
 

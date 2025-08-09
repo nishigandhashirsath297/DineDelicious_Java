@@ -23,7 +23,7 @@ const MenuPage = () => {
     const fetchMenuItems = async () => {
       try {
         const response = await axiosInstance.get('/menu-items');
-        setMenuItems(response.data);
+        setMenuItems(response.data || []);
       } catch (err) {
         setError('Failed to load menu items. Please try again later.');
         console.error(err);
@@ -35,12 +35,21 @@ const MenuPage = () => {
     fetchMenuItems();
   }, []);
 
-  const categories = ['All', ...new Set(menuItems.map(item => item.category))];
+  // Extract unique categories, ignoring null/undefined
+  const categories = [
+    'All',
+    ...new Set(menuItems.map(item => item.category || 'Uncategorized'))
+  ];
 
+  // Filtering logic with lowercase comparison
   const filteredItems = menuItems.filter(item => {
-    const matchCategory = selectedCategory === 'All' || item.category === selectedCategory;
-    const matchType = selectedType === 'All' || item.type === selectedType;
-    return matchCategory && matchType;
+    const categoryMatch =
+      selectedCategory === 'All' ||
+      (item.category && item.category.toLowerCase() === selectedCategory.toLowerCase());
+    const typeMatch =
+      selectedType === 'All' ||
+      (item.type && item.type.toLowerCase() === selectedType.toLowerCase());
+    return categoryMatch && typeMatch;
   });
 
   const handleOrderClick = (item) => {
@@ -68,6 +77,7 @@ const MenuPage = () => {
     <Container className="my-5">
       <h2 className="text-center mb-4 fancy-heading">Our Menu</h2>
 
+      {/* Filters */}
       <div className="mb-4 text-center">
         <select
           className="form-select w-50 mx-auto mb-3"
@@ -103,6 +113,7 @@ const MenuPage = () => {
         </ButtonGroup>
       </div>
 
+      {/* Menu Cards */}
       <Row>
         {filteredItems.map((item, index) => (
           <Col key={index} md={6} lg={4} className="mb-4">
@@ -110,7 +121,7 @@ const MenuPage = () => {
               <Card className="h-100 menu-card">
                 <Card.Img
                   variant="top"
-                  src={item.image}
+                  src={item.image || item.imageUrl || '/placeholder-food.jpg'}
                   alt={item.name}
                   style={{ height: '200px', objectFit: 'cover' }}
                 />
@@ -121,7 +132,7 @@ const MenuPage = () => {
                     <div className="d-flex justify-content-between align-items-center">
                       <span className="text-muted">
                         {item.category} |{' '}
-                        {item.type === 'veg' ? (
+                        {item.type && item.type.toLowerCase() === 'veg' ? (
                           <GiBroccoli className="text-success" />
                         ) : (
                           <GiMeat className="text-danger" />
@@ -144,6 +155,7 @@ const MenuPage = () => {
         ))}
       </Row>
 
+      {/* Modal */}
       <Modal show={showModal} onHide={handleCloseModal} centered>
         {selectedItem && (
           <>
@@ -152,7 +164,7 @@ const MenuPage = () => {
             </Modal.Header>
             <Modal.Body className="text-center">
               <img
-                src={selectedItem.image}
+                src={selectedItem.image || selectedItem.imageUrl || '/placeholder-food.jpg'}
                 alt={selectedItem.name}
                 className="img-fluid mb-3"
                 style={{ maxHeight: '200px', objectFit: 'cover' }}
